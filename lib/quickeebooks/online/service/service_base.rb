@@ -2,7 +2,7 @@ require 'rexml/document'
 require 'uri'
 require 'cgi'
 require 'quickeebooks/common/logging'
-require 'nori'
+require 'xmlhasher'
 
 class IntuitRequestException < Exception
   attr_accessor :code, :cause
@@ -35,9 +35,7 @@ module Quickeebooks
             access_token = oauth_access_token
             realm_id = realm_id
           end
-          @parser = ::Nori.new(:parser => :nokogiri,
-                               :strip_namespaces => true,
-                               :convert_tags_to => lambda { |tag| tag.snakecase.to_sym })
+          @parser = ::XmlHasher::Parser.new(:snakecase => true, :ignore_namespaces => true)
         end
 
         def access_token=(token)
